@@ -1,0 +1,55 @@
+// "development": {
+  //   "username": "root",
+  //   "password": null,
+  //   "database": "mobileInventorydata",
+  //   "host": "localhost",
+  //   "dialect": "mysql"
+  // }
+
+
+  {
+    "message": "Created",
+    "company": {
+        "companyActive": true,
+        "id": 1,
+        "companyName": "Abbas Inv. Limited",
+        "companyAddress": "Abuja GRA Garki",
+        "companyPhone": "08023451278",
+        "companyEmail": "ibom@gmail.com",
+        "companyState": "Abuja",
+        "companyLocalGov": "Garki",
+        "updatedAt": "2020-08-18T18:26:54.865Z",
+        "createdAt": "2020-08-18T18:26:54.865Z"
+    },
+    "user": {
+        "userActive": true,
+        "changePassword": false,
+        "id": 1,
+        "companyId": 1,
+        "userFullName": "Abdul Yusuf",
+        "userAddress": "D41 Inike Okene",
+        "userEmail": "aabdul@yahoo.com",
+        "userPhone": "09087654211",
+        "userPassword": "$2b$10$2Tu97FgY/GBfyUC96KSRMuxiyqzLJ0Lzt4GIhtmJTGZEA.IFi2FzS",
+        "userName": "abdul",
+        "updatedAt": "2020-08-18T18:26:54.961Z",
+        "createdAt": "2020-08-18T18:26:54.961Z"
+    },
+    "userRight": {
+        "id": 1,
+        "userId": 1,
+        "regBy": 1,
+        "updatedBy": 1,
+        "pos": true,
+        "suppliers": true,
+        "customers": true,
+        "products": true,
+        "settings": true,
+        "expense": true,
+        "debtors": true,
+        "creditors": true,
+        "reports": true,
+        "updatedAt": "2020-08-18T18:26:54.970Z",
+        "createdAt": "2020-08-18T18:26:54.970Z"
+    }
+}
