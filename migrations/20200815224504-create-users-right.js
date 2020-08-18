@@ -40,6 +40,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue:false
       },
+      adduser: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:false
+      },
       settings: {
         type: Sequelize.BOOLEAN,
         defaultValue:false

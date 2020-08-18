@@ -5,8 +5,8 @@ const checkAuth = require ('../middlewares/check-auth');
 const usersControlllers = require('../controllers/usersController');
 
 router.post('/newcompany', usersControlllers.create_new_company);
-router.post('/addfirstuser', usersControlllers.add_user_to_company);
-router.post('/addmoreuser', usersControlllers.add_user_to_company);
+router.post('/addmoreuser', checkAuth, usersControlllers.add_user_to_company);
+router.post('/login', usersControlllers.user_login);
 
 
 // router.post('/create', usersControlllers.create_new_user);

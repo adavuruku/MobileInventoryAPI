@@ -5,8 +5,8 @@ module.exports = (req, res, next)=>{
        //authorization sending token with the header - authorization header
        const token = req.headers.authorization.split(" ")[1];
     //    console.log(token, "hello")
-       const decoded = jwt.verify(token,process.env.MY_HASH_SECRET);
-       req.userData = decoded;
+       const decoded = jwt.verify(token,'SherifAdavurukuApp');
+       req.userData = decoded.user;
        next();
     }catch(error){
         res.status(401).json({
