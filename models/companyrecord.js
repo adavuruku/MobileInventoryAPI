@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey : 'companyId',
           as : 'users'
       });
+      CompanyRecord.hasMany(models.Supplier,{
+        foreignKey : 'companyId',
+        as : 'supplier'
+      });
+      CompanyRecord.hasMany(models.Customer,{
+        foreignKey : 'companyId',
+        as : 'customer'
+      });
     }
   };
   CompanyRecord.init({

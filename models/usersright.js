@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue:false
     },
+    adduser: {
+      type: DataTypes.BOOLEAN,
+      defaultValue:false
+    },
     creditors: {
       type: DataTypes.BOOLEAN,
       defaultValue:false
@@ -72,6 +76,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'UsersRight',
+    tableName: "UsersRights",
+    timestamps:true,
   });
   return UsersRight;
 };

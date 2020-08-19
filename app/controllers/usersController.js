@@ -13,7 +13,7 @@ const token = (user) =>{
    'SherifAdavurukuApp');
 }
 //user Create
-const {CompanyRecord,CompanyUser,UsersRight} = require('../../models/index');
+const {CompanyRecord,CompanyUser,UsersRight,Supplier,Customer} = require('../../models/index');
 
 exports.create_new_company = async (req,res,next)=>{
     const t = await db.sequelize.transaction();
@@ -31,7 +31,7 @@ exports.create_new_company = async (req,res,next)=>{
         if(company){
             //add user
             let hash = await bcrypt.hash("user",10)
-            let userExist = CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
+            let userExist = await CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
             if(userExist && hash){
                let user = await CompanyUser.create(
                     {
@@ -94,30 +94,32 @@ exports.user_login = async (req,res,next)=>{
                   ]
             }
         });
-        const hash = await bcrypt.compare(req.body.userPassword.trim(),user.userPassword)
-        if(user && hash){
-            const company = await user.getCompany();
-            if(company.companyActive){
-                const userRight = await user.getRight();
-                const tokenValue = token(user)
-                return res.status(201).json({
-                    message:'Found',
-                    token:tokenValue,
-                    user:user,
-                    company:company,
-                    right:userRight
-                });
-            }else{
-                return res.status(401).json({
-                    message:'Record Not Found'
-                });
+        
+        if(user){
+            const hash = await bcrypt.compare(req.body.userPassword.trim(),user.userPassword)
+            if(hash){
+                const company = await user.getCompany();
+                const supplier =  await company.getSupplier();
+                const customer =  await company.getCustomer();
+                if(company.companyActive){
+                    const userRight = await user.getRight();
+                    const tokenValue = token(user)
+                    return res.status(201).json({
+                        message:'Found',
+                        token:tokenValue,
+                        user:user,
+                        company:company,
+                        supplier:supplier,
+                        customer:customer,
+                        right:userRight
+                    });
+                } 
             }
             
-        }else{
-            return res.status(401).json({
-                message:'Record Not Found'
-            });
         }
+        return res.status(401).json({
+            message:'Record Not Found'
+        });
     }catch (error) {
         return res.status(500).json({
             message:'Fail',
@@ -128,9 +130,10 @@ exports.user_login = async (req,res,next)=>{
 }
 
 exports.add_user_to_company = async (req,res,next)=>{
+    const t = await db.sequelize.transaction();
     try {
         let hash = await bcrypt.hash("user",10)
-        let userExist = CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
+        let userExist = await CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
         if(userExist && hash){
             let user = await CompanyUser.create(
                 {
@@ -165,6 +168,108 @@ exports.add_user_to_company = async (req,res,next)=>{
         await t.rollback();
         return res.status(406).json({
             message:'User Already Exist !!'
+        });
+    } catch (error) {
+        await t.rollback();
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+
+exports.add_new_supplier = async (req,res,next)=>{
+    try {
+        let newSupplier = await Supplier.create(
+            {
+                companyId : req.userData.companyId,
+                supplierName : req.body.supplierName.trim(),
+                supplierAddress : req.body.supplierAddress.trim(),
+                supplierEmail : req.body.supplierEmail.trim().toLowerCase(),
+                supplierPhone : req.body.supplierPhone.trim(),
+                supplierState : req.body.supplierState.trim(),
+                supplierLocalGov : req.body.supplierLocalGov.trim(),
+                regBy : req.userData.id,
+                updatedBy : req.userData.id
+            });
+            if(newSupplier){
+                return res.status(201).json({
+                    message:'Created',
+                    supplier:newSupplier
+                });
+            }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+
+exports.add_new_customer = async (req,res,next)=>{
+    try {
+        let customerPhone = req.body.customerPhone? req.body.customerPhone.trim() : null
+        let customerEmail = req.body.customerEmail? req.body.customerEmail.trim().toLowerCase() : null
+        let customerAddress = req.body.customerAddress? req.body.customerAddress.trim() : null
+
+        let newCustomer = await Customer.create(
+            {
+                companyId : req.userData.companyId,
+                customerName : req.body.customerName.trim(),
+                customerAddress : customerAddress,
+                customerEmail : customerEmail,
+                customerPhone : customerPhone,
+                regBy : req.userData.id,
+                updatedBy : req.userData.id
+            });
+            if(newCustomer){
+                return res.status(201).json({
+                    message:'Created',
+                    customer:newCustomer
+                });
+            }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+
+exports.change_password = async (req,res,next)=>{
+    try {
+        let userExist = await CompanyUser.findByPk(req.userData.id)
+        const company = await userExist.getCompany();
+        if(userExist && userExist.userActive && company.companyActive){
+            const hashCompare = await bcrypt.compare(req.body.oldPassword.trim(),userExist.userPassword)
+            if(hashCompare){
+                let hash = await bcrypt.hash(req.body.newPassword.trim(),10)
+                const updatedPassword = await userExist.update({
+                    userPassword : hash,
+                    changePassword:true
+                })
+                if(updatedPassword){
+                    return res.status(201).json({
+                        message:'Updated',
+                        user:userExist
+                    });
+                }
+            }else{
+                return res.status(406).json({
+                    message:'Previous Password Is Invalid'
+                });
+            }
+            
+        }
+
+        return res.status(406).json({
+            message:'Fail'
         });
     } catch (error) {
         return res.status(500).json({
