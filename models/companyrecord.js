@@ -23,6 +23,30 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey : 'companyId',
         as : 'customer'
       });
+      CompanyRecord.hasMany(models.Expense,{
+        foreignKey : 'companyId',
+        as : 'expense'
+      });
+      CompanyRecord.hasMany(models.PaymentMethod,{
+        foreignKey : 'companyId',
+        as : 'paytype'
+      });
+      CompanyRecord.hasMany(models.MeasureType,{
+        foreignKey : 'companyId',
+        as : 'measuretype'
+      });
+      CompanyRecord.hasMany(models.SellingType,{
+        foreignKey : 'companyId',
+        as : 'sellingtype'
+      });
+      CompanyRecord.hasMany(models.Product,{
+        foreignKey : 'companyId',
+        as : 'product'
+      });
+      CompanyRecord.hasMany(models.ProductCosting,{
+        foreignKey : 'companyId',
+        as : 'productcosting'
+      });
     }
   };
   CompanyRecord.init({
