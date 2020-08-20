@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Product.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
-      Product.belongsTo(models.MeasureType, { as: 'measureType', foreignKey: 'measureType' });
+      Product.belongsTo(models.MeasureType, { as: 'measure', foreignKey: 'measureTypeId' });
       Product.hasMany(models.ProductCosting,{
         foreignKey : 'productId',
         as : 'productcost'
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     totalStock: {type: DataTypes.DECIMAL(10, 2) ,allowNull: false},
     reorderLevel: {type: DataTypes.DECIMAL(10, 2) ,allowNull: false},
     productActive: {type: DataTypes.BOOLEAN,defaultValue:true},
-    measureType: {type: DataTypes.INTEGER,allowNull: false},
+    measureTypeId: {type: DataTypes.INTEGER,allowNull: false},
     companyId: {type: DataTypes.INTEGER,allowNull: false},
     regBy: {type: DataTypes.INTEGER,allowNull: false},
     updatedBy: {type: DataTypes.INTEGER,allowNull: false},

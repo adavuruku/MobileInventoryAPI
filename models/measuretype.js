@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       // bad, cup, carton, mudu, pack, kg, g, plate
       MeasureType.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
       MeasureType.hasMany(models.Product,{
-        foreignKey : 'measureType',
+        foreignKey : 'measureTypeId',
         as : 'product'
       });
     }

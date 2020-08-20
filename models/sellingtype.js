@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       // example - (Retail, WholeSale, Rental)
       SellingType.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
       SellingType.hasMany(models.ProductCosting,{
-        foreignKey : 'sellingType',
-        as : 'sellingType'
+        foreignKey : 'sellingTypeId',
+        as : 'productcost'
       });
     }
   };

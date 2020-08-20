@@ -17,7 +17,7 @@ const {CompanyRecord,CompanyUser,UsersRight,Supplier,Customer} = require('../../
 
 exports.create_new_company = async (req,res,next)=>{
     const t = await db.sequelize.transaction();
-    try {
+    // try {
         //add company
         let company = await CompanyRecord.create({
             companyName : req.body.companyName.trim(),
@@ -32,7 +32,7 @@ exports.create_new_company = async (req,res,next)=>{
             //add user
             let hash = await bcrypt.hash("user",10)
             let userExist = await CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
-            if(userExist && hash){
+            if(!userExist && hash){
                let user = await CompanyUser.create(
                     {
                         companyId : company.id,
@@ -45,6 +45,7 @@ exports.create_new_company = async (req,res,next)=>{
                     },{transaction:t});
                 if(user){
                     //add useRight
+                    const tokenValue = token(user)
                     let userRight = await UsersRight.create(
                         {
                                 userId:user.id,
@@ -59,6 +60,7 @@ exports.create_new_company = async (req,res,next)=>{
                         await t.commit();
                         return res.status(201).json({
                             message:'Created',
+                            token:tokenValue,
                             company:company,
                             user:user,
                             userRight:userRight
@@ -74,13 +76,13 @@ exports.create_new_company = async (req,res,next)=>{
             message:'User Already Exist !!'
         });
 
-    } catch (error) {
-        await t.rollback();
-        return res.status(500).json({
-            message:'Fail',
-            error:error.name
-        });
-    }
+    // } catch (error) {
+    //     await t.rollback();
+    //     return res.status(500).json({
+    //         message:'Fail',
+    //         error:error.name
+    //     });
+    // }
 }
 
 exports.user_login = async (req,res,next)=>{
@@ -134,7 +136,7 @@ exports.add_user_to_company = async (req,res,next)=>{
     try {
         let hash = await bcrypt.hash("user",10)
         let userExist = await CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
-        if(userExist && hash){
+        if(!userExist && hash){
             let user = await CompanyUser.create(
                 {
                     companyId : req.userData.companyId,

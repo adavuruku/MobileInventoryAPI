@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // example - (Retail, WholeSale, Rental) - wholesale cp - 20 , sp - 25
       ProductCosting.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
-      ProductCosting.belongsTo(models.SellingType, { as: 'sellingType', foreignKey: 'sellingType' });
+      ProductCosting.belongsTo(models.SellingType, { as: 'sellingType', foreignKey: 'sellingTypeId' });
       ProductCosting.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' });
     }
   };
@@ -16,17 +16,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
-    costPrice: {type: Sequelize.DECIMAL(15, 2) ,allowNull: false},
-    sellingPrice: {type: Sequelize.DECIMAL(15, 2) ,allowNull: false},
-    sellingType: {type: Sequelize.INTEGER,allowNull: false},
-    productId: {type: Sequelize.INTEGER,allowNull: false},
-    companyId: {type: Sequelize.INTEGER,allowNull: false},
-    regBy: {type: Sequelize.INTEGER,allowNull: false},
-    updatedBy: {type: Sequelize.INTEGER,allowNull: false},
-    createdAt: {allowNull: false,type: Sequelize.DATE},
-    updatedAt: {allowNull: false,type: Sequelize.DATE},
+    costPrice: {type: DataTypes.DECIMAL(15, 2) ,allowNull: false},
+    sellingPrice: {type: DataTypes.DECIMAL(15, 2) ,allowNull: false},
+    sellingTypeId: {type: DataTypes.INTEGER,allowNull: false},
+    productId: {type: DataTypes.INTEGER,allowNull: false},
+    companyId: {type: DataTypes.INTEGER,allowNull: false},
+    regBy: {type: DataTypes.INTEGER,allowNull: false},
+    updatedBy: {type: DataTypes.INTEGER,allowNull: false},
+    createdAt: {allowNull: false,type: DataTypes.DATE},
+    updatedAt: {allowNull: false,type: DataTypes.DATE},
   }, {
     sequelize,
     modelName: 'ProductCosting',

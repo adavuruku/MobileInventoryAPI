@@ -11,7 +11,7 @@ module.exports = {
       costPrice: {type: Sequelize.DECIMAL(15, 2) ,allowNull: false},
       sellingPrice: {type: Sequelize.DECIMAL(15, 2) ,allowNull: false},
       
-      sellingType: {type: Sequelize.INTEGER,references: {model: {tableName: 'SellingTypes'},key: 'id'},allowNull: false},
+      sellingTypeId: {type: Sequelize.INTEGER,references: {model: {tableName: 'SellingTypes'},key: 'id'},allowNull: false},
       productId: {type: Sequelize.INTEGER,references: {model: {tableName: 'Products'},key: 'id'},allowNull: false},
       
       companyId: {type: Sequelize.INTEGER,references: {model: {tableName: 'CompanyRecords'},key: 'id'},allowNull: false},

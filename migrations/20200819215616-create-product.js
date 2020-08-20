@@ -15,7 +15,7 @@ module.exports = {
       totalStock: {type: Sequelize.DECIMAL(10, 2) ,allowNull: false},
       reorderLevel: {type: Sequelize.DECIMAL(10, 2) ,allowNull: false},
       productActive: {type: Sequelize.BOOLEAN,defaultValue:true},
-      measureType: {type: Sequelize.INTEGER,references: {model: {tableName: 'MeasureTypes'},key: 'id'},allowNull: false},
+      measureTypeId: {type: Sequelize.INTEGER,references: {model: {tableName: 'MeasureTypes'},key: 'id'},allowNull: false},
       companyId: {type: Sequelize.INTEGER,references: {model: {tableName: 'CompanyRecords'},key: 'id'},allowNull: false},
       regBy: {type: Sequelize.INTEGER,references: {model: {tableName: 'CompanyUsers'},key: 'id'},allowNull: false},
       updatedBy: {type: Sequelize.INTEGER,references: {model: {tableName: 'CompanyUsers'},key: 'id'},allowNull: false},
