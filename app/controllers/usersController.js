@@ -254,7 +254,8 @@ exports.change_password = async (req,res,next)=>{
                 let hash = await bcrypt.hash(req.body.newPassword.trim(),10)
                 const updatedPassword = await userExist.update({
                     userPassword : hash,
-                    changePassword:true
+                    changePassword:true,
+                    updatedBy:req.userData.id
                 })
                 if(updatedPassword){
                     return res.status(201).json({
