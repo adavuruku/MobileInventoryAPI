@@ -17,7 +17,7 @@ const {CompanyRecord,CompanyUser,UsersRight,Supplier,Customer} = require('../../
 
 exports.create_new_company = async (req,res,next)=>{
     const t = await db.sequelize.transaction();
-    // try {
+    try {
         //add company
         let company = await CompanyRecord.create({
             companyName : req.body.companyName.trim(),
@@ -76,13 +76,13 @@ exports.create_new_company = async (req,res,next)=>{
             message:'User Already Exist !!'
         });
 
-    // } catch (error) {
-    //     await t.rollback();
-    //     return res.status(500).json({
-    //         message:'Fail',
-    //         error:error.name
-    //     });
-    // }
+    } catch (error) {
+        await t.rollback();
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
 }
 
 exports.user_login = async (req,res,next)=>{
