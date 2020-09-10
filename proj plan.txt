@@ -1,0 +1,43 @@
+always empty some of the table and add new gotten records
+
+
+Login
+    login : (online, offline) -> usersTable
+    (login is required all the times)
+
+    first time if password not change - take user to changePassword screen
+
+    if (network):
+        update customer, supplier, debt, credit, expense, paymentMethod, measureType, 
+        sellingType, productGroup, userRight.
+        productRecord
+    
+        WorkerBackGround run every 20 minutes if internet
+            (company ->(supplier,customer)) - requestA.
+            (company ->(debt,credit,expenses)) - requestB.
+            (company ->(paymentMethod, measureType, sellingType, productGroup, userRight, user)) - requestC.
+            (company ->(productRecord)) - requestD.
+
+    first time login (internet run all the above and reschedule for next processes)
+
+or
+    if login first time:
+        1. run this on the background : (company ->(paymentMethod, measureType, sellingType, productGroup, userRight, user)) - requestC.
+        2. onclick of each menu load from db or locally
+
+transaction is taking locally if no internet but online if internet
+    (till a transaction is finish before its moved online - transaction completed locally is 
+    marked completed - only completed transaction is moved to the online - after moved online and receipt displayed the system delete record in local system)
+
+    every view of transaction history / report is online.
+
+
+Reports (Are strictly using Online data)
+
+
+*****************************
+*   Do You want to Login As 
+*   Abdulraheem Sherif A (continue with existing db records) - both internet or local
+*   Or Another User (delete all the database records - initialise user) - require internet to login
+***************************************
+

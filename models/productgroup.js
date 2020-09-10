@@ -3,17 +3,21 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class SellingType extends Model {
+  class ProductGroup extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
-      // example - (Retail, WholeSale, Rental)
-      SellingType.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
-      SellingType.hasMany(models.Product,{
-        foreignKey : 'sellingTypeId',
-        as : 'productcost'
+      ProductGroup.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
+      ProductGroup.hasMany(models.Product,{
+        foreignKey : 'groupTitleId',
+        as : 'group'
       });
     }
   };
-  SellingType.init({
+  ProductGroup.init({
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -21,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
 
-    sellingType: {type: DataTypes.STRING,allowNull: false},
+    groupTitle: {type: DataTypes.STRING,allowNull: false},
     isActive: {type: DataTypes.BOOLEAN,defaultValue:true},
     companyId: {type: DataTypes.INTEGER,allowNull: false},
     regBy: {type: DataTypes.INTEGER,allowNull: false},
@@ -30,9 +34,9 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {allowNull: false,type: DataTypes.DATE}
   }, {
     sequelize,
-    modelName: 'SellingType',
-    tableName: 'SellingTypes',
+    modelName: 'ProductGroup',
+    tableName: 'ProductGroups',
     timestamps:true,
   });
-  return SellingType;
+  return ProductGroup;
 };

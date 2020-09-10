@@ -47,6 +47,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey : 'companyId',
         as : 'productcosting'
       });
+
+      CompanyRecord.hasMany(models.Creditor,{
+        foreignKey : 'companyId',
+        as : 'creditors'
+      });
+
+      CompanyRecord.hasMany(models.Debtor,{
+        foreignKey : 'companyId',
+        as : 'debtors'
+      });
     }
   };
   CompanyRecord.init({

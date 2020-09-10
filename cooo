@@ -53,3 +53,19 @@
         "createdAt": "2020-08-18T18:26:54.970Z"
     }
 }
+
+
+debtors : people owing you
+creditors: people you are owing
+expenses : money you spent
+
+paymentmethod : (method customer wants to use in payment) cash, transfer, card, e.t.c
+companyuser: list of users attach to the company
+customer: the customer registered by the company
+measureType: product measurement (mudu, cup, bag, kg, etc)
+
+        sellingTypeId, measureType, costPrice, sellingPrice
+    gari, wholeSale, cup, 100, 110
+    gari, retail, cup, 100, 105
+
+    where garri 

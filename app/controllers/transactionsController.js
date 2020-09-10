@@ -6,12 +6,12 @@ var multer = require('multer');
 const db = require('../../models');
 
 //user Create
-const {CompanyRecord,CompanyUser,UsersRight,Supplier,Customer,
+const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,
     MeasureType, Expense,PaymentMethod, SellingType} = require('../../models/index');
 
+//create expenses
 exports.create_expense = async (req,res,next)=>{
     try {
-        //add company
         let expense = await Expense.create({
             expenseName : req.body.expenseName.trim(),
             expenseDescription : req.body.expenseDescription.trim(),
@@ -40,9 +40,73 @@ exports.create_expense = async (req,res,next)=>{
     }
 }
 
+//create debt
+exports.create_debt = async (req,res,next)=>{
+    try {
+        let debt = await Debtor.create({
+            debtorName : req.body.debtorName.trim(),
+            debtorPhone : req.body.debtorPhone.trim(),
+            debtDescription : req.body.debtDescription.trim(),
+            debtAmount : req.body.debtAmount,
+            debtDate : req.body.debtDate,
+            debtTime : req.body.debtTime,
+            companyId : req.userData.companyId,
+            regBy : req.userData.id,
+            updatedBy : req.userData.id
+        });
+
+        if(debt){
+            return res.status(201).json({
+                message:'Created',
+                debt:debt
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+//create credit
+exports.create_credit = async (req,res,next)=>{
+    try {
+        let credit = await Creditor.create({
+            creditorName : req.body.creditorName.trim(),
+            creditorPhone : req.body.creditorPhone.trim(),
+            creditDescription : req.body.creditDescription.trim(),
+            creditAmount : req.body.creditAmount,
+            creditDate : req.body.creditDate,
+            creditTime : req.body.creditTime,
+            companyId : req.userData.companyId,
+            regBy : req.userData.id,
+            updatedBy : req.userData.id
+        });
+
+        if(credit){
+            return res.status(201).json({
+                message:'Created',
+                credit:credit
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+//create payment method
 exports.create_payment_method = async (req,res,next)=>{
     try {
-        //add payment method
         let paymethod = await PaymentMethod.create({
             payType : req.body.payType.trim().toUpperCase(),
             companyId : req.userData.companyId,
@@ -67,9 +131,9 @@ exports.create_payment_method = async (req,res,next)=>{
     }
 }
 
+//create measure types
 exports.create_measure_type = async (req,res,next)=>{
     try {
-        //add payment method
         let measure = await MeasureType.create({
             measureType : req.body.measureType.trim().toUpperCase(),
             companyId : req.userData.companyId,
@@ -94,9 +158,9 @@ exports.create_measure_type = async (req,res,next)=>{
     }
 }
 
+//create selling types
 exports.create_selling_type = async (req,res,next)=>{
     try {
-        //add payment method
         let sellingtype = await SellingType.create({
             sellingType : req.body.sellingType.trim().toUpperCase(),
             companyId : req.userData.companyId,
@@ -108,6 +172,33 @@ exports.create_selling_type = async (req,res,next)=>{
             return res.status(201).json({
                 message:'Created',
                 sellingtype:sellingtype
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+//create product groups
+exports.create_product_group= async (req,res,next)=>{
+    try {
+        let productGroup = await ProductGroup.create({
+            groupTitle : req.body.groupTitle.trim().toUpperCase(),
+            companyId : req.userData.companyId,
+            regBy : req.userData.id,
+            updatedBy : req.userData.id
+        });
+
+        if(productGroup){
+            return res.status(201).json({
+                message:'Created',
+                productGroup:productGroup
             });
         }
         return res.status(406).json({

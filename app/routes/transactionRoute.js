@@ -6,9 +6,13 @@ const transactionsControllers = require('../controllers/transactionsController')
 
 
 router.post('/addexpense', checkAuth, transactionsControllers.create_expense);
+router.post('/adddebt', checkAuth, transactionsControllers.create_debt);
+router.post('/addcredit', checkAuth, transactionsControllers.create_credit);
 router.post('/addpaymethod', checkAuth, transactionsControllers.create_payment_method);
 router.post('/addmeasure', checkAuth, transactionsControllers.create_measure_type);
 router.post('/addselling', checkAuth, transactionsControllers.create_selling_type);
+router.post('/addproductgroup', checkAuth, transactionsControllers.create_product_group);
+
 router.post('/addproduct', checkAuth, transactionsControllers.create_product);
 // router.post('/addsupplier', checkAuth, usersControlllers.add_new_supplier);
 // router.post('/addcustomer', checkAuth, usersControlllers.add_new_customer);
