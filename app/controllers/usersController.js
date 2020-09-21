@@ -30,7 +30,7 @@ exports.create_new_company = async (req,res,next)=>{
 
         if(company){
             //add user
-            let hash = await bcrypt.hash("user",10)
+            let hash = await bcrypt.hash(req.body.userPhone.trim(),10)
             let userExist = await CompanyUser.findOne({ where: {userName: req.body.userName.trim()}})
             if(!userExist && hash){
                let user = await CompanyUser.create(
@@ -72,7 +72,7 @@ exports.create_new_company = async (req,res,next)=>{
         }
 
         await t.rollback();
-        return res.status(406).json({
+        return res.status(200).json({
             message:'User Already Exist !!'
         });
 
@@ -101,8 +101,8 @@ exports.user_login = async (req,res,next)=>{
             const hash = await bcrypt.compare(req.body.userPassword.trim(),user.userPassword)
             if(hash){
                 const company = await user.getCompany();
-                const supplier =  await company.getSupplier();
-                const customer =  await company.getCustomer();
+                // const supplier =  await company.getSupplier();
+                // const customer =  await company.getCustomer();
                 if(company.companyActive){
                     const userRight = await user.getRight();
                     const tokenValue = token(user)
@@ -111,9 +111,7 @@ exports.user_login = async (req,res,next)=>{
                         token:tokenValue,
                         user:user,
                         company:company,
-                        supplier:supplier,
-                        customer:customer,
-                        right:userRight
+                        userRight:userRight
                     });
                 } 
             }
