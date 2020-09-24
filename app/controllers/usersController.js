@@ -209,6 +209,62 @@ exports.add_new_supplier = async (req,res,next)=>{
     }
 }
 
+
+exports.delete_supplier = async (req,res,next)=>{
+    try {
+        let supplierExist = await Supplier.findByPk(req.body.supplierId)
+        if(supplierExist && req.userData.companyId == supplierExist.companyId){
+            const updatedSupplier = await supplierExist.update({
+                supplierActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updatedSupplier){
+                return res.status(201).json({
+                    message:'Deleted',
+                    supplier:supplierExist
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Paaa'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+exports.update_supplier = async (req,res,next)=>{
+    try {
+        let supplierExist = await Supplier.findByPk(req.body.supplierId)
+        if(supplierExist && req.userData.companyId == supplierExist.companyId){
+            const updatedSupplier = await supplierExist.update({
+                supplierName : req.body.supplierName.trim(),
+                supplierAddress : req.body.supplierAddress.trim(),
+                supplierEmail : req.body.supplierEmail.trim().toLowerCase(),
+                supplierPhone : req.body.supplierPhone.trim(),
+                supplierState : req.body.supplierState.trim(),
+                supplierLocalGov : req.body.supplierLocalGov.trim(),
+                updatedBy:req.userData.id
+            })
+            if(updatedSupplier){
+                return res.status(201).json({
+                    message:'Updated',
+                    supplier:supplierExist
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Paaa'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
 exports.add_new_customer = async (req,res,next)=>{
     try {
         let customerPhone = req.body.customerPhone? req.body.customerPhone.trim() : null
@@ -256,6 +312,7 @@ exports.change_password = async (req,res,next)=>{
                     updatedBy:req.userData.id
                 })
                 if(updatedPassword){
+                    userExist = await CompanyUser.findByPk(req.userData.id)
                     return res.status(201).json({
                         message:'Updated',
                         user:userExist

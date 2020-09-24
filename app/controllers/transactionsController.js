@@ -7,7 +7,7 @@ const db = require('../../models');
 
 //user Create
 const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,
-    MeasureType, Expense,PaymentMethod, SellingType} = require('../../models/index');
+    MeasureType, Expense,PaymentMethod,Customer, Creditor, SellingType, Supplier} = require('../../models/index');
 
 //create expenses
 exports.create_expense = async (req,res,next)=>{
@@ -228,6 +228,125 @@ exports.create_product = async (req,res,next)=>{
             return res.status(201).json({
                 message:'Created',
                 sellingtype:sellingtype
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+exports.all_statistic = async (req,res,next)=>{
+    try {
+        const company = await CompanyRecord.findOne({
+            where:{id: req.userData.companyId},
+            include: [
+                {
+                    model:Supplier,
+                    as: 'supplier',
+                    required:false,
+                    where: {supplierActive: true}
+                },
+                {
+                    model:CompanyUser,
+                    as: 'users',
+                    where: {userActive: true},
+                    include:{
+                        model:UsersRight,
+                        as: 'right',
+                    }
+                },
+                {
+                    model:Customer,
+                    as: 'customer',
+                    required:false,
+                    where: {customerActive: true}
+                },
+                {
+                    model:PaymentMethod,
+                    as: 'paytype',
+                    required:false,
+                    where: {isActive: true}
+                },
+                {
+                    model:MeasureType,
+                    as: 'measuretype',
+                    required:false,
+                    where: {isActive: true}
+                },
+                {
+                    model:SellingType,
+                    as: 'sellingtype',
+                    required:false,
+                    where: {isActive: true}
+                },
+                {
+                    model:Creditor,
+                    as: 'creditors',
+                    required:false,
+                    where: {creditActive: true}
+                },
+                {
+                    model:Debtor,
+                    as: 'debtors',
+                    required:false,
+                    where: {debtActive: true}
+                }
+            ]
+            
+        })
+        if(company){
+            return res.status(201).json({
+                message:'Found',
+                company:company
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+
+exports.all_product_statistic = async (req,res,next)=>{
+    try {
+        const company = await CompanyRecord.findOne({
+            where:{id: 10},
+            include: [
+                {
+                    model:ProductGroup,
+                    as: 'productgroups',
+                    required:false,
+                    where: {isActive: true},
+                    include:{
+                        model:Product,
+                        as: 'group',
+                        required:false,
+                        where: {productActive: true},
+                        include:{
+                            model:ProductCosting,
+                            as: 'productcost',
+                            required:false
+                        }
+                    }
+                }
+            ]
+            
+        })
+        if(company){
+            return res.status(201).json({
+                message:'Found',
+                company:company
             });
         }
         return res.status(406).json({

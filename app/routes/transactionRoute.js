@@ -14,6 +14,8 @@ router.post('/addselling', checkAuth, transactionsControllers.create_selling_typ
 router.post('/addproductgroup', checkAuth, transactionsControllers.create_product_group);
 
 router.post('/addproduct', checkAuth, transactionsControllers.create_product);
+router.get('/allstatistics', checkAuth, transactionsControllers.all_statistic);
+router.get('/allproducts', checkAuth, transactionsControllers.all_product_statistic);
 // router.post('/addsupplier', checkAuth, usersControlllers.add_new_supplier);
 // router.post('/addcustomer', checkAuth, usersControlllers.add_new_customer);
 // router.patch('/updatepassword', checkAuth, usersControlllers.change_password);

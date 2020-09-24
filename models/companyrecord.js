@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey : 'companyId',
         as : 'sellingtype'
       });
+      CompanyRecord.hasMany(models.ProductGroup,{
+        foreignKey : 'companyId',
+        as : 'productgroups'
+      });
       CompanyRecord.hasMany(models.Product,{
         foreignKey : 'companyId',
         as : 'product'
