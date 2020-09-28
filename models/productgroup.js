@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       ProductGroup.belongsTo(models.CompanyRecord, { as: 'company', foreignKey: 'companyId' });
       ProductGroup.hasMany(models.Product,{
         foreignKey : 'groupTitleId',
-        as : 'group'
+        as : 'products'
       });
     }
   };

@@ -6,8 +6,8 @@ var multer = require('multer');
 const db = require('../../models');
 
 //user Create
-const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,
-    MeasureType, Expense,PaymentMethod,Customer, Creditor, SellingType, Supplier} = require('../../models/index');
+const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,ProductCosting,
+    MeasureType, Expense,PaymentMethod,Customer, Creditor, Product,SellingType, Supplier} = require('../../models/index');
 
 //create expenses
 exports.create_expense = async (req,res,next)=>{
@@ -188,18 +188,28 @@ exports.create_selling_type = async (req,res,next)=>{
 //create product groups
 exports.create_product_group= async (req,res,next)=>{
     try {
-        let productGroup = await ProductGroup.create({
-            groupTitle : req.body.groupTitle.trim().toUpperCase(),
-            companyId : req.userData.companyId,
-            regBy : req.userData.id,
-            updatedBy : req.userData.id
-        });
-
-        if(productGroup){
-            return res.status(201).json({
-                message:'Created',
-                productGroup:productGroup
+        let productgroupExit = await ProductGroup.findOne({
+            where:{
+                [Op.and]:[
+                    {groupTitle:req.body.groupTitle.trim().toUpperCase()},
+                    {companyId:req.userData.companyId}
+                ]
+            }
+        })
+        
+        if(!productgroupExit){
+            let productGroup = await ProductGroup.create({
+                groupTitle : req.body.groupTitle.trim().toUpperCase(),
+                companyId : req.userData.companyId,
+                regBy : req.userData.id,
+                updatedBy : req.userData.id
             });
+            if(productGroup){
+                return res.status(201).json({
+                    message:'Created',
+                    productGroup:productGroup
+                });
+            }
         }
         return res.status(406).json({
             message:'Fail'
@@ -286,6 +296,12 @@ exports.all_statistic = async (req,res,next)=>{
                     where: {isActive: true}
                 },
                 {
+                    model:Expense,
+                    as: 'expense',
+                    required:false,
+                    where: {expenseActive: true}
+                },
+                {
                     model:Creditor,
                     as: 'creditors',
                     required:false,
@@ -321,7 +337,7 @@ exports.all_statistic = async (req,res,next)=>{
 exports.all_product_statistic = async (req,res,next)=>{
     try {
         const company = await CompanyRecord.findOne({
-            where:{id: 10},
+            where:{id: req.userData.companyId},
             include: [
                 {
                     model:ProductGroup,
@@ -330,7 +346,7 @@ exports.all_product_statistic = async (req,res,next)=>{
                     where: {isActive: true},
                     include:{
                         model:Product,
-                        as: 'group',
+                        as: 'products',
                         required:false,
                         where: {productActive: true},
                         include:{
@@ -341,7 +357,6 @@ exports.all_product_statistic = async (req,res,next)=>{
                     }
                 }
             ]
-            
         })
         if(company){
             return res.status(201).json({
