@@ -212,6 +212,7 @@ exports.add_new_supplier = async (req,res,next)=>{
 
 exports.delete_supplier = async (req,res,next)=>{
     try {
+        
         let supplierExist = await Supplier.findByPk(req.body.supplierId)
         if(supplierExist && req.userData.companyId == supplierExist.companyId){
             const updatedSupplier = await supplierExist.update({
@@ -225,8 +226,8 @@ exports.delete_supplier = async (req,res,next)=>{
                 });
             }
         }
-        return res.status(406).json({
-            message:'Paaa'
+        return res.status(500).json({
+            message:'Pass'
         });
     } catch (error) {
         return res.status(500).json({
