@@ -13,4 +13,6 @@ router.patch('/updatepassword', checkAuth, usersControlllers.change_password);
 router.patch('/suppliers/delete', checkAuth, usersControlllers.delete_supplier);
 router.patch('/suppliers/update', checkAuth, usersControlllers.update_supplier);
 
+router.patch('/customers/delete', checkAuth, usersControlllers.delete_customer);
+
 module.exports = router;

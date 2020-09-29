@@ -320,7 +320,7 @@ exports.all_statistic = async (req,res,next)=>{
             return res.status(201).json({
                 message:'Found',
                 company:company
-            });
+            }); 
         }
         return res.status(406).json({
             message:'Fail'

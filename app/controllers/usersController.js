@@ -209,7 +209,32 @@ exports.add_new_supplier = async (req,res,next)=>{
     }
 }
 
-
+exports.delete_customer = async (req,res,next)=>{
+    try {
+        
+        let customerExist = await Customer.findByPk(req.body.customerId)
+        if(customerExist && req.userData.companyId == customerExist.companyId){
+            const updatedCustomer = await customerExist.update({
+                customerActive:true,
+                updatedBy:req.userData.id
+            })
+            if(updatedCustomer){
+                return res.status(201).json({
+                    message:'Deleted',
+                    customer:customerExist
+                });
+            }
+        }
+        return res.status(500).json({
+            message:'Pass'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
 exports.delete_supplier = async (req,res,next)=>{
     try {
         
