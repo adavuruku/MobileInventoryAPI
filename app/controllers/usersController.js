@@ -211,11 +211,11 @@ exports.add_new_supplier = async (req,res,next)=>{
 
 exports.delete_customer = async (req,res,next)=>{
     try {
-        
+       console.log(req.body) 
         let customerExist = await Customer.findByPk(req.body.customerId)
         if(customerExist && req.userData.companyId == customerExist.companyId){
             const updatedCustomer = await customerExist.update({
-                customerActive:true,
+                customerActive:false,
                 updatedBy:req.userData.id
             })
             if(updatedCustomer){
@@ -226,7 +226,35 @@ exports.delete_customer = async (req,res,next)=>{
             }
         }
         return res.status(500).json({
-            message:'Pass'
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+exports.update_customer = async (req,res,next)=>{
+    try {
+        let customerExist = await Customer.findByPk(req.body.customerId)
+        if(customerExist && req.userData.companyId == customerExist.companyId){
+            const updatedCustomer = await customerExist.update({
+                customerName : req.body.customerName.trim(),
+                customerAddress : req.body.customerAddress.trim(),
+                customerEmail : req.body.customerEmail.trim().toLowerCase(),
+                customerPhone : req.body.customerPhone.trim(),
+                updatedBy:req.userData.id
+            })
+            if(updatedCustomer){
+                return res.status(201).json({
+                    message:'Updated',
+                    customer:updatedCustomer
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Paaa'
         });
     } catch (error) {
         return res.status(500).json({
@@ -252,7 +280,7 @@ exports.delete_supplier = async (req,res,next)=>{
             }
         }
         return res.status(500).json({
-            message:'Pass'
+            message:'Fail'
         });
     } catch (error) {
         return res.status(500).json({
