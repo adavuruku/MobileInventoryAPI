@@ -87,6 +87,7 @@ exports.create_new_company = async (req,res,next)=>{
 
 exports.user_login = async (req,res,next)=>{
     try {
+        // console.log(req.body)
         //check if username exist
         const user = await CompanyUser.findOne({ 
             where: { 
@@ -96,7 +97,7 @@ exports.user_login = async (req,res,next)=>{
                   ]
             }
         });
-        
+        // console.log(user)
         if(user){
             const hash = await bcrypt.compare(req.body.userPassword.trim(),user.userPassword)
             if(hash){
@@ -121,6 +122,7 @@ exports.user_login = async (req,res,next)=>{
             message:'Record Not Found'
         });
     }catch (error) {
+        // console.log(error)
         return res.status(500).json({
             message:'Fail',
             error:error
@@ -210,8 +212,7 @@ exports.add_new_supplier = async (req,res,next)=>{
 }
 
 exports.delete_customer = async (req,res,next)=>{
-    try {
-       console.log(req.body) 
+    try { 
         let customerExist = await Customer.findByPk(req.body.customerId)
         if(customerExist && req.userData.companyId == customerExist.companyId){
             const updatedCustomer = await customerExist.update({

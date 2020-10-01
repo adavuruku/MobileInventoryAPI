@@ -71,6 +71,7 @@ exports.create_debt = async (req,res,next)=>{
         });
     }
 }
+// 
 
 //create credit
 exports.create_credit = async (req,res,next)=>{
@@ -104,6 +105,63 @@ exports.create_credit = async (req,res,next)=>{
     }
 }
 
+exports.update_credit = async (req,res,next)=>{
+    try {
+        let creditExist = await Creditor.findByPk(req.body.creditId)
+        if(creditExist && req.userData.companyId == creditExist.companyId){
+            const updatedCreditor = await creditExist.update({
+                creditorName : req.body.creditorName.trim(),
+                creditorPhone : req.body.creditorPhone.trim(),
+                creditDescription : req.body.creditDescription.trim(),
+                creditAmount : req.body.creditAmount,
+                creditDate : req.body.creditDate,
+                creditTime : req.body.creditTime,
+                updatedBy : req.userData.id
+            })
+            if(updatedCreditor){
+                return res.status(201).json({
+                    message:'Updated',
+                    creditor:updatedCreditor
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+
+exports.delete_credit = async (req,res,next)=>{
+    try {
+        let creditExist = await Creditor.findByPk(req.body.creditorId)
+        if(creditExist && req.userData.companyId == creditExist.companyId){
+            const updatedCreditor = await creditExist.update({
+                creditActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updatedCreditor){
+                return res.status(201).json({
+                    message:'Deleted',
+                    creditor:creditExist
+                });
+            }
+        }
+        return res.status(500).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
 //create payment method
 exports.create_payment_method = async (req,res,next)=>{
     try {
