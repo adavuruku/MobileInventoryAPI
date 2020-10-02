@@ -40,6 +40,60 @@ exports.create_expense = async (req,res,next)=>{
     }
 }
 
+exports.delete_expense = async (req,res,next)=>{
+    try {
+        let expenseExist = await Expense.findByPk(req.body.expenseId)
+        if(expenseExist && req.userData.companyId == expenseExist.companyId){
+            const updatedExpense = await expenseExist.update({
+                expenseActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updatedExpense){
+                return res.status(201).json({
+                    message:'Deleted',
+                    expense:updatedExpense
+                });
+            }
+        }
+        return res.status(500).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(400).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+exports.update_expense = async (req,res,next)=>{
+    try {
+        let expenseExist = await Expense.findByPk(req.body.expenseId)
+        if(expenseExist && req.userData.companyId == expenseExist.companyId){
+            const updatedExpense = await expenseExist.update({
+                expenseName : req.body.expenseName.trim(),
+                expenseDescription : req.body.expenseDescription.trim(),
+                expenseAmount : req.body.expenseAmount,
+                expenseDate : req.body.expenseDate,
+                expenseTime : req.body.expenseTime,
+                updatedBy : req.userData.id
+            })
+            if(updatedExpense){
+                return res.status(201).json({
+                    message:'Updated',
+                    expense:updatedExpense
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
 //create debt
 exports.create_debt = async (req,res,next)=>{
     try {
