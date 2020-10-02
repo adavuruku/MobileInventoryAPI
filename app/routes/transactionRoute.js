@@ -6,7 +6,10 @@ const transactionsControllers = require('../controllers/transactionsController')
 
 
 router.post('/addexpense', checkAuth, transactionsControllers.create_expense);
+
 router.post('/adddebt', checkAuth, transactionsControllers.create_debt);
+router.patch('/debt/update', checkAuth, transactionsControllers.update_debt);
+router.patch('/deletedebt', checkAuth, transactionsControllers.delete_debt);
 
 router.post('/addcredit', checkAuth, transactionsControllers.create_credit);
 router.patch('/deletecredit', checkAuth, transactionsControllers.delete_credit);

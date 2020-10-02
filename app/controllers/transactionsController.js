@@ -65,13 +65,69 @@ exports.create_debt = async (req,res,next)=>{
             message:'Fail'
         });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             message:'Fail',
             error:error.name
         });
     }
 }
-// 
+exports.update_debt = async (req,res,next)=>{
+    try {
+        let debtExist = await Debtor.findByPk(req.body.debtId)
+        if(debtExist && req.userData.companyId == debtExist.companyId){
+            const updatedDebtor = await debtExist.update({
+                debtorName : req.body.debtorName.trim(),
+                debtorPhone : req.body.debtorPhone.trim(),
+                debtDescription : req.body.debtDescription.trim(),
+                debtAmount : req.body.debtAmount,
+                debtDate : req.body.debtDate,
+                debtTime : req.body.debtTime,
+                updatedBy : req.userData.id
+            })
+            if(updatedDebtor){
+                return res.status(201).json({
+                    message:'Updated',
+                    debt:updatedDebtor
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+
+exports.delete_debt = async (req,res,next)=>{
+    try {
+        let debtExist = await Debtor.findByPk(req.body.debtId)
+        if(debtExist && req.userData.companyId == debtExist.companyId){
+            const updatedDebtor = await debtExist.update({
+                debtActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updatedDebtor){
+                return res.status(201).json({
+                    message:'Deleted',
+                    debt:updatedDebtor
+                });
+            }
+        }
+        return res.status(500).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(400).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
 
 //create credit
 exports.create_credit = async (req,res,next)=>{
