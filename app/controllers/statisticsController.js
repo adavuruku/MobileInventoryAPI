@@ -21,10 +21,20 @@ exports.expenseotherincome = async (req,res,next)=>{
         }
     })
 
-    if(expense){
+    let otherincome = await OtherIncome.findAll({
+        where:{
+            [Op.and]:[
+                {incomeActive: true},
+                {companyId:req.userData.companyId}
+            ]
+        }
+    })
+
+    if(expense && otherincome){
         return res.status(201).json({
             message:'Found',
-            expense:expense
+            expense:expense,
+            otherincome:otherincome
         }); 
     }
     return res.status(406).json({
@@ -34,6 +44,15 @@ exports.expenseotherincome = async (req,res,next)=>{
 }
 
 exports.usersandright = async (req,res,next)=>{
+    const company = await CompanyRecord.findOne({
+        where:{
+            [Op.and]:[
+                {id: req.userData.companyId},
+                {companyActive:true}
+            ]
+        }
+    })
+
     let users = await CompanyUser.findAll({
         where:{
             [Op.and]:[
@@ -50,6 +69,7 @@ exports.usersandright = async (req,res,next)=>{
     if(users){
         return res.status(201).json({
             message:'Found',
+            company:company,
             users:users
         }); 
     }
@@ -87,12 +107,22 @@ exports.sellingconfig = async (req,res,next)=>{
         }
     })
 
+    let productGroup = await ProductGroup.findAll({
+        where:{
+            [Op.and]:[
+                {isActive: true},
+                {companyId:req.userData.companyId}
+            ]
+        }
+    })
+
     if(sellingType && measureType && paymentMethod){
         return res.status(201).json({
             message:'Found',
             paymentMethod:paymentMethod,
             measureType:measureType,
-            sellingType:sellingType
+            sellingType:sellingType,
+            productGroup:productGroup 
         }); 
     }
     return res.status(406).json({
@@ -120,21 +150,13 @@ exports.creditdebt = async (req,res,next)=>{
         }
     })
 
-    let otherincome = await OtherIncome.findAll({
-        where:{
-            [Op.and]:[
-                {incomeActive: true},
-                {companyId:req.userData.companyId}
-            ]
-        }
-    })
+    
 
-    if(creditor && debtor && otherincome){
+    if(creditor && debtor){
         return res.status(201).json({
             message:'Found',
             creditors:creditor,
-            debtors:debtor,
-            otherincome:otherincome
+            debtors:debtor
         }); 
     }
     return res.status(406).json({

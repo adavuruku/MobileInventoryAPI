@@ -22,9 +22,16 @@ router.patch('/deleteotherincome', checkAuth, transactionsControllers.delete_oth
 router.patch('/otherincome/update', checkAuth, transactionsControllers.update_other_income);
 
 router.post('/addpaymethod', checkAuth, transactionsControllers.create_payment_method);
+router.patch('/deletepaymethod', checkAuth, transactionsControllers.delete_payment_method);
+
 router.post('/addmeasure', checkAuth, transactionsControllers.create_measure_type);
+router.patch('/deletemeasure', checkAuth, transactionsControllers.delete_measure_type);
+
 router.post('/addselling', checkAuth, transactionsControllers.create_selling_type);
+router.patch('/deleteselling', checkAuth, transactionsControllers.delete_selling_type);
+
 router.post('/addproductgroup', checkAuth, transactionsControllers.create_product_group);
+router.patch('/deleteproductgroup', checkAuth, transactionsControllers.delete_product_group);
 
 router.post('/addproduct', checkAuth, transactionsControllers.create_product);
 router.get('/allstatistics', checkAuth, transactionsControllers.all_statistic);

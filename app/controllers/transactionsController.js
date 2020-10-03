@@ -305,7 +305,7 @@ exports.create_other_income = async (req,res,next)=>{
 }
 exports.delete_other_income = async (req,res,next)=>{
     try {
-        let otherincomeExist = await OtherIncome.findByPk(req.body.otherincomeId)
+        let otherincomeExist = await OtherIncome.findByPk(req.body.otherIncomeId)
         if(otherincomeExist && req.userData.companyId == otherincomeExist.companyId){
             const updatedOtherIncome = await otherincomeExist.update({
                 incomeActive:false,
@@ -331,7 +331,7 @@ exports.delete_other_income = async (req,res,next)=>{
 }
 exports.update_other_income = async (req,res,next)=>{
     try {
-        let otherincomeExist = await OtherIncome.findByPk(req.body.otherincomeId)
+        let otherincomeExist = await OtherIncome.findByPk(req.body.otherIncomeId)
         if(otherincomeExist && req.userData.companyId == otherincomeExist.companyId){
             const updatedOtherIncome = await otherincomeExist.update({
                 incomeName : req.body.incomeName.trim(),
@@ -343,7 +343,7 @@ exports.update_other_income = async (req,res,next)=>{
             })
             if(updatedOtherIncome){
                 return res.status(201).json({
-                    message:'Deleted',
+                    message:'Updated',
                     otherincome:updatedOtherIncome
                 });
             }
@@ -387,23 +387,22 @@ exports.create_payment_method = async (req,res,next)=>{
         });
     }
 }
-
-//create measure types
-exports.create_measure_type = async (req,res,next)=>{
+exports.delete_payment_method = async (req,res,next)=>{
     try {
-        let measure = await MeasureType.create({
-            measureType : req.body.measureType.trim().toUpperCase(),
-            companyId : req.userData.companyId,
-            regBy : req.userData.id,
-            updatedBy : req.userData.id
-        });
-
-        if(measure){
-            return res.status(201).json({
-                message:'Created',
-                measure:measure
-            });
+        let itemExist = await PaymentMethod.findByPk(req.body.paymentTypeId)
+        if(itemExist && req.userData.companyId == itemExist.companyId){
+            const updateRecord = await itemExist.update({
+                isActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updateRecord){
+                return res.status(201).json({
+                    message:'Deleted',
+                    paymethod:updateRecord
+                });
+            }
         }
+
         return res.status(406).json({
             message:'Fail'
         });
@@ -414,6 +413,8 @@ exports.create_measure_type = async (req,res,next)=>{
         });
     }
 }
+
+
 
 //create selling types
 exports.create_selling_type = async (req,res,next)=>{
@@ -441,7 +442,87 @@ exports.create_selling_type = async (req,res,next)=>{
         });
     }
 }
+exports.delete_selling_type = async (req,res,next)=>{
+    try {
+        let itemExist = await SellingType.findByPk(req.body.sellingTypeId)
+        if(itemExist && req.userData.companyId == itemExist.companyId){
+            const updateRecord = await itemExist.update({
+                isActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updateRecord){
+                return res.status(201).json({
+                    message:'Deleted',
+                    sellingtype:updateRecord
+                });
+            }
+        }
 
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+
+
+//create measure types
+exports.create_measure_type = async (req,res,next)=>{
+    try {
+        let measure = await MeasureType.create({
+            measureType : req.body.measureType.trim().toUpperCase(),
+            companyId : req.userData.companyId,
+            regBy : req.userData.id,
+            updatedBy : req.userData.id
+        });
+
+        if(measure){
+            return res.status(201).json({
+                message:'Created',
+                measure:measure
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+exports.delete_measure_type = async (req,res,next)=>{
+    try {
+        let itemExist = await SellingType.findByPk(req.body.measureId)
+        if(itemExist && req.userData.companyId == itemExist.companyId){
+            const updateRecord = await itemExist.update({
+                isActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updateRecord){
+                return res.status(201).json({
+                    message:'Deleted',
+                    measuretype:updateRecord
+                });
+            }
+        }
+
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
 //create product groups
 exports.create_product_group= async (req,res,next)=>{
     try {
@@ -468,6 +549,32 @@ exports.create_product_group= async (req,res,next)=>{
                 });
             }
         }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+exports.delete_product_group = async (req,res,next)=>{
+    try {
+        let itemExist = await ProductGroup.findByPk(req.body.groupId)
+        if(itemExist && req.userData.companyId == itemExist.companyId){
+            const updateRecord = await itemExist.update({
+                isActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updateRecord){
+                return res.status(201).json({
+                    message:'Deleted',
+                    productGroup:updateRecord
+                });
+            }
+        }
+
         return res.status(406).json({
             message:'Fail'
         });

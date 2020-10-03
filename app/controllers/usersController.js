@@ -85,6 +85,41 @@ exports.create_new_company = async (req,res,next)=>{
     }
 }
 
+//update company
+exports.update_company = async (req,res,next)=>{
+    try {
+        let companyExist = await CompanyRecord.findByPk(req.body.companyId)
+        if(companyExist && req.userData.companyId == companyExist.id){
+            const updatedCompany = await companyExist.update({
+                companyName : req.body.companyName.trim(),
+                companyAddress : req.body.companyAddress.trim(),
+                companyPhone : req.body.companyPhone.trim(),
+                companyEmail : req.body.companyEmail.trim().toLowerCase(),
+                companyState : req.body.companyState.trim(),
+                companyLocalGov : req.body.companyLocalGov.trim(),
+                updatedBy:req.userData.id
+            })
+            if(updatedCompany){
+                return res.status(201).json({
+                    message:'Updated',
+                    company:updatedCompany
+                });
+            }
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+
+
+
 exports.user_login = async (req,res,next)=>{
     try {
         // console.log(req.body)
