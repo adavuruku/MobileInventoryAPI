@@ -61,6 +61,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey : 'companyId',
         as : 'debtors'
       });
+      CompanyRecord.hasMany(models.OtherIncome,{
+        foreignKey : 'companyId',
+        as : 'otherincomes'
+      });
     }
   };
   CompanyRecord.init({

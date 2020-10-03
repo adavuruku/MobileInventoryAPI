@@ -17,6 +17,10 @@ router.post('/addcredit', checkAuth, transactionsControllers.create_credit);
 router.patch('/deletecredit', checkAuth, transactionsControllers.delete_credit);
 router.patch('/credit/update', checkAuth, transactionsControllers.update_credit);
 
+router.post('/addotherincome', checkAuth, transactionsControllers.create_other_income);
+router.patch('/deleteotherincome', checkAuth, transactionsControllers.delete_other_income);
+router.patch('/otherincome/update', checkAuth, transactionsControllers.update_other_income);
+
 router.post('/addpaymethod', checkAuth, transactionsControllers.create_payment_method);
 router.post('/addmeasure', checkAuth, transactionsControllers.create_measure_type);
 router.post('/addselling', checkAuth, transactionsControllers.create_selling_type);

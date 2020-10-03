@@ -6,7 +6,7 @@ var multer = require('multer');
 const db = require('../../models');
 
 //user Create
-const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,ProductCosting,
+const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,ProductCosting,OtherIncome,
     MeasureType, Expense,PaymentMethod,Customer, Creditor, Product,SellingType, Supplier} = require('../../models/index');
 
 //create expenses
@@ -272,6 +272,95 @@ exports.delete_credit = async (req,res,next)=>{
         });
     }
 }
+
+//other incomes
+exports.create_other_income = async (req,res,next)=>{
+    try {
+        let otherincome = await OtherIncome.create({
+            incomeName : req.body.incomeName.trim(),
+            incomeDescription : req.body.incomeDescription.trim(),
+            incomeAmount : req.body.incomeAmount,
+            incomeDate : req.body.incomeDate,
+            incomeTime : req.body.incomeTime,
+            companyId : req.userData.companyId,
+            regBy : req.userData.id,
+            updatedBy : req.userData.id
+        });
+
+        if(otherincome){
+            return res.status(201).json({
+                message:'Created',
+                otherincome:otherincome
+            });
+        }
+        return res.status(406).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message:'Fail',
+            error:error.name
+        });
+    }
+}
+exports.delete_other_income = async (req,res,next)=>{
+    try {
+        let otherincomeExist = await OtherIncome.findByPk(req.body.otherincomeId)
+        if(otherincomeExist && req.userData.companyId == otherincomeExist.companyId){
+            const updatedOtherIncome = await otherincomeExist.update({
+                incomeActive:false,
+                updatedBy:req.userData.id
+            })
+            if(updatedOtherIncome){
+                return res.status(201).json({
+                    message:'Deleted',
+                    otherincome:updatedOtherIncome
+                });
+            }
+        }
+        return res.status(500).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+exports.update_other_income = async (req,res,next)=>{
+    try {
+        let otherincomeExist = await OtherIncome.findByPk(req.body.otherincomeId)
+        if(otherincomeExist && req.userData.companyId == otherincomeExist.companyId){
+            const updatedOtherIncome = await otherincomeExist.update({
+                incomeName : req.body.incomeName.trim(),
+                incomeDescription : req.body.incomeDescription.trim(),
+                incomeAmount : req.body.incomeAmount,
+                incomeDate : req.body.incomeDate,
+                incomeTime : req.body.incomeTime,
+                updatedBy:req.userData.id
+            })
+            if(updatedOtherIncome){
+                return res.status(201).json({
+                    message:'Deleted',
+                    otherincome:updatedOtherIncome
+                });
+            }
+        }
+        return res.status(500).json({
+            message:'Fail'
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            message:'Fail',
+            error:error
+        });
+    }
+}
+
+
 //create payment method
 exports.create_payment_method = async (req,res,next)=>{
     try {

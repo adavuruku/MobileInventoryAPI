@@ -6,7 +6,7 @@ var multer = require('multer');
 const db = require('../../models');
 
 //user Create
-const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,ProductCosting,
+const {CompanyRecord,CompanyUser,UsersRight,Debtor,ProductGroup,ProductCosting,OtherIncome,
     MeasureType, Expense,PaymentMethod,Customer, Creditor, Product,SellingType, Supplier} = require('../../models/index');
     
 
@@ -120,11 +120,21 @@ exports.creditdebt = async (req,res,next)=>{
         }
     })
 
-    if(creditor && debtor){
+    let otherincome = await OtherIncome.findAll({
+        where:{
+            [Op.and]:[
+                {incomeActive: true},
+                {companyId:req.userData.companyId}
+            ]
+        }
+    })
+
+    if(creditor && debtor && otherincome){
         return res.status(201).json({
             message:'Found',
             creditors:creditor,
-            debtors:debtor
+            debtors:debtor,
+            otherincome:otherincome
         }); 
     }
     return res.status(406).json({
