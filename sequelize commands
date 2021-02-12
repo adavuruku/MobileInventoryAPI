@@ -1,0 +1,13 @@
+
+npx sequelize init (config, migration, model) folders
+
+1
+revert most recent migration.
+
+npx sequelize-cli db:migrate:undo
+
+2
+revert all migration
+npx sequelize-cli db:migrate:undo:all
+
+3.
